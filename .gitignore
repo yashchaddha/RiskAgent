@@ -5,6 +5,11 @@ __pycache__/
 
 # C extensions
 *.so
+prompts/
+api/
+frontend/
+graph/
+.vscode/
 
 # Distribution / packaging
 .Python

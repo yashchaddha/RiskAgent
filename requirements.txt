@@ -1,0 +1,17 @@
+langgraph
+langchain
+langchain-openai
+langchain-community
+openai
+pymongo
+websockets
+motor
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+uuid
+datetime
+typing-extensions
+loguru
