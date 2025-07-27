@@ -87,6 +87,7 @@ def create_workflow():
                 "database_manager": "database_manager",
                 "risk_reviewer": "risk_reviewer",
                 "intent_parser": "intent_parser",
+                "report_generator": "report_generator",
                 "complete": END
             }
         )
@@ -162,7 +163,7 @@ def route_from_knowledge_engine(state: GraphState) -> str:
     return target
 
 def route_from_risk_generator(state: GraphState) -> str:
-    valid = {"risk_reviewer", "intent_parser", "complete"}
+    valid = {"risk_reviewer", "intent_parser", "report_generator", "complete"}
     target = state.current_node if state.current_node in valid else "intent_parser"
     logger.debug(f"Routing from risk_generator -> {target}")
     return target
