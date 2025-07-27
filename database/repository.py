@@ -86,7 +86,6 @@ class SessionRepository:
         """Get active graph state for user"""
         graph_state_doc = await self.collection.find_one({
             "user_id": user_id,
-            "is_active": True
         })
         if graph_state_doc:
             return GraphState(**graph_state_doc)
@@ -142,7 +141,6 @@ class SessionRepository:
         result = await self.collection.update_many(
             {
                 "last_activity": {"$lt": cutoff_datetime},
-                "is_active": True
             },
             {"$set": {"is_active": False}}
         )
@@ -152,7 +150,6 @@ class SessionRepository:
         """Get active graph state by username"""
         graph_state_doc = await self.collection.find_one({
             "username": username,
-            "is_active": True
         })
         if graph_state_doc:
             return GraphState(**graph_state_doc)

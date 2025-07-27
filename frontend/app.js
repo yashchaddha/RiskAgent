@@ -224,7 +224,7 @@ class RiskAssessmentChat {
   }
 
   handleMessage(data) {
-    const { type, message, workflow_status, risks, timestamp } = data;
+    const { type, message, workflow_status, risks, report, timestamp } = data;
     switch (type) {
       case "welcome":
         this.addSystemMessage(message);
@@ -240,6 +240,9 @@ class RiskAssessmentChat {
         }
         if (risks && risks.length > 0) {
           this.displayRisks(risks);
+        }
+        if (report) {
+          this.displayReport(report);
         }
         break;
       case "typing":
@@ -596,6 +599,47 @@ class RiskAssessmentChat {
         }, index * 100);
       });
     }, 100);
+  }
+
+  displayReport(report) {
+    if (!report || !report.content) return;
+
+    const reportDiv = document.createElement("div");
+    reportDiv.className = "report-display";
+    reportDiv.innerHTML = `
+      <div class="report-header">
+        <i class="fas fa-file-shield"></i>
+        <h4>${report.title || "Risk Assessment Report"}</h4>
+        <div class="report-actions">
+          <button class="btn btn-primary" onclick="viewReportInModal('${encodeURIComponent(report.content)}', '${encodeURIComponent(report.title || "Risk Assessment Report")}')">
+            <i class="fas fa-eye"></i> View Report
+          </button>
+          <button class="btn btn-secondary" onclick="downloadReport('${encodeURIComponent(report.content)}', '${encodeURIComponent(report.title || "Risk Assessment Report")}')">
+            <i class="fas fa-download"></i> Download
+          </button>
+        </div>
+      </div>
+      <div class="report-preview">
+        <p><i class="fas fa-info-circle"></i> Your comprehensive risk assessment report has been generated. Click "View Report" to see the full details or "Download" to save it to your device.</p>
+        <div class="report-meta">
+          <span><i class="fas fa-calendar"></i> Generated: ${new Date(report.generated_at || Date.now()).toLocaleString()}</span>
+        </div>
+      </div>
+    `;
+
+    this.messagesContainer.appendChild(reportDiv);
+    this.scrollToBottom();
+
+    // Store report for later access
+    this.currentReport = report;
+
+    // Animate report display
+    setTimeout(() => {
+      reportDiv.style.animation = "slideIn 0.5s forwards";
+    }, 100);
+
+    // Show notification
+    this.showNotification("📊 Your risk assessment report is ready!", "success");
   }
 
   showTyping(message = "AI is analyzing...") {
@@ -1013,6 +1057,72 @@ window.onclick = function (event) {
     closeRiskModal();
   }
 };
+
+// Report viewing and download functions
+function viewReportInModal(encodedContent, encodedTitle) {
+  const content = decodeURIComponent(encodedContent);
+  const title = decodeURIComponent(encodedTitle);
+  
+  // Create report modal
+  const modal = document.createElement("div");
+  modal.className = "report-modal";
+  modal.innerHTML = `
+    <div class="report-modal-backdrop" onclick="closeReportModal()"></div>
+    <div class="report-modal-content">
+      <div class="report-modal-header">
+        <h3><i class="fas fa-file-shield"></i> ${title}</h3>
+        <button class="modal-close" onclick="closeReportModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="report-modal-body">
+        ${content}
+      </div>
+      <div class="report-modal-footer">
+        <button class="btn btn-secondary" onclick="closeReportModal()">
+          <i class="fas fa-times"></i> Close
+        </button>
+        <button class="btn btn-primary" onclick="downloadReport('${encodedContent}', '${encodedTitle}')">
+          <i class="fas fa-download"></i> Download Report
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  
+  // Store reference for closing
+  window.currentReportModal = modal;
+}
+
+function closeReportModal() {
+  if (window.currentReportModal) {
+    document.body.removeChild(window.currentReportModal);
+    window.currentReportModal = null;
+  }
+}
+
+function downloadReport(encodedContent, encodedTitle) {
+  const content = decodeURIComponent(encodedContent);
+  const title = decodeURIComponent(encodedTitle);
+  
+  // Create blob and download
+  const blob = new Blob([content], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.html`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  URL.revokeObjectURL(url);
+  
+  if (window.chat) {
+    window.chat.showNotification("Report downloaded successfully!", "success");
+  }
+}
 
 // Initialize the chat application
 document.addEventListener("DOMContentLoaded", () => {

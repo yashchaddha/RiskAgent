@@ -169,7 +169,7 @@ def route_from_risk_generator(state: GraphState) -> str:
     return target
 
 def route_from_risk_reviewer(state: GraphState) -> str:
-    valid = {"risk_generator", "metadata_collector", "database_manager", "risk_reviewer", "complete"}
+    valid = {"risk_generator", "metadata_collector", "database_manager", "risk_reviewer", "report_generator", "intent_parser", "complete"}
     target = state.current_node if state.current_node in valid else "intent_parser"
     logger.debug(f"Routing from risk_reviewer -> {target}")
     return target
@@ -195,10 +195,11 @@ def route_from_database_manager(state: GraphState) -> str:
     return target
 
 def route_from_report_generator(state: GraphState) -> str:
-    mapping = {
-        "report_generator": "report_generator", 
-        "intent_parser": "intent_parser"
-    }
-    target = mapping.get(state.current_node, "complete")
-    logger.debug(f"Routing from report_generator -> {target}")
-    return target
+    # When report generation is complete, end the workflow
+    if state.current_node == "complete":
+        logger.debug(f"Routing from report_generator -> END (complete)")
+        return "complete"
+    else:
+        # If there's an error, go back to intent_parser
+        logger.debug(f"Routing from report_generator -> intent_parser (error)")
+        return "intent_parser"

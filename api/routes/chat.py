@@ -93,12 +93,20 @@ async def handle_chat_message(message_data: dict, username: str):
                 "intent": result.intent,
                 "needs_clarification": result.requires_input,
                 "show_metadata_popup": result.show_metadata_popup,
-                "metadata_completed": result.metadata_completed
+                "metadata_completed": result.metadata_completed,
             }
         }
         if result.draft_risks and result.show_risks:
             response_data["risks"] = result.draft_risks
             response_data["workflow_status"]["total_risks"] = len(result.draft_risks)
+        
+        # Include report data if available
+        if result.session_data and "report_content" in result.session_data:
+            response_data["report"] = {
+                "content": result.session_data["report_content"],
+                "title": result.session_data.get("report_title", "Risk Assessment Report"),
+                "generated_at": datetime.now().isoformat()
+            }
 
         await manager.send_personal_message(response_data, username)
     except Exception as e:

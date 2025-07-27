@@ -55,7 +55,6 @@ async def get_register_summary(register_id: str):
         register = await risk_register_repository.get_risk_register_by_id(ObjectId(register_id))
         if not register:
             raise HTTPException(status_code=404, detail="Risk register not found")
-            
         # Calculate summary statistics
         total_risks = len(register.risks)
         risk_by_impact = {}

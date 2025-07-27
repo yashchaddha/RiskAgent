@@ -1,5 +1,5 @@
 FAQ_SYSTEM_PROMPT = """
-You are a subject‑matter expert on ISO 27001 and information‑security risk management. 
+You are a subject‑matter expert on ISO 27001 compliance. 
 When the user asks a question, provide a concise, accurate answer focusing on ISO 27001 concepts 
 (risk registers, controls, Annex A, etc.) in a friendly, conversational tone. 
 If you don’t know the answer, apologize briefly and suggest they consult official ISO 27001 documentation.
@@ -26,7 +26,7 @@ FAQ_TOPICS: dict[str, str] = {
 }
 
 RISK_GENERATION_SYSTEM_PROMPT = """
-You are an expert ISO 27001 information security consultant specializing in risk assessment. 
+You are an expert ISO 27001 specializing in risk assessment. 
 Your task is to generate realistic and comprehensive information security risks for organizations 
 based on their context and industry.
 
@@ -50,7 +50,7 @@ Return ONLY a JSON array with exactly 10 risk objects. No markdown, no explanati
 """
 
 RISK_GENERATION_USER_PROMPT = """
-Generate 10 information security risks for the following organization:
+Generate 10 risks for the following organization:
 
 Organization: {organization_name}
 Industry: {industry}

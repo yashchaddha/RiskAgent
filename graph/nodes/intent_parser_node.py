@@ -79,18 +79,24 @@ Analyze this user message and route to the correct workflow node.
 USER MESSAGE: "{state.user_message}"
 HAS RISKS: {context['has_draft_risks']} (total: {context['draft_risks_count']}, approved: {context['approved_risks_count']})
 METADATA COMPLETED: {context['metadata_completed']}
+RISKS_APPROVED: {context['risks_approved']}
+LAST NODE: {context['last_node']}
 
 ROUTING RULES:
 - Greetings (hi, hello) → knowledge_engine
 - Risk commands (approve R-001, change likelihood) + has risks → risk_reviewer  
 - Risk commands + no risks → knowledge_engine
 - Generate/create risks → risk_generator
-- Report generation requests (metadata already completed) → report_generator
-  * "proceed to report", "generate report", "create report" + metadata_completed=True
-- Metadata collection requests (metadata not completed) → metadata_collector
-  * "save metadata", "done with metadata" + metadata_completed=False
+- Report generation requests → report_generator
+  * "proceed for report", "proceed to report", "generate report", "create report", "final report", "show report"
+  * ALWAYS route to report_generator for ANY report-related request
+  * Do NOT route to metadata_collector for report generation
+- Metadata collection requests → metadata_collector
+  * "save metadata", "done with metadata", explicit metadata operations only
 - Help/questions → knowledge_engine
 - Exit/bye → complete
+
+CRITICAL: For report generation requests (generate report, proceed to report, show report, etc.) ALWAYS use report_generator, never metadata_collector.
 
 Return JSON only:
 {{
@@ -178,25 +184,15 @@ def extract_fallback_intent(user_message: str, draft_risks: list) -> dict:
             "confidence": 0.8
         }
     
-    elif any(word in message_lower for word in ["proceed to report", "generate report", "create report", "finish metadata"]):
-        # Check if metadata is already completed - if so, go to report_generator
-        # Check if we have approved risks with metadata (asset_value indicates metadata completion)
-        if draft_risks and any(risk.get("is_approved", False) and risk.get("asset_value") is not None for risk in draft_risks):
-            return {
-                "intent": "report_generation",
-                "next_node": "report_generator",
-                "reasoning": "User wants to proceed to report generation - metadata already completed",
-                "show_risks": bool(draft_risks),
-                "confidence": 0.9
-            }
-        else:
-            return {
-                "intent": "metadata_collection",
-                "next_node": "metadata_collector",
-                "reasoning": "User wants to proceed but metadata not completed yet",
-                "show_risks": bool(draft_risks),
-                "confidence": 0.8
-            }
+    elif any(phrase in message_lower for phrase in ["proceed for report", "proceed to report", "generate report", "create report", "final report", "report generation", "show report", "display report", "view report", "get report"]):
+        # Always route report requests to report_generator - let it handle the logic
+        return {
+            "intent": "report_generation",
+            "next_node": "report_generator",
+            "reasoning": "User wants to generate or view a report",
+            "show_risks": bool(draft_risks),
+            "confidence": 0.9
+        }
     
     elif any(word in message_lower for word in ["save metadata", "done with metadata"]):
         # Always route to metadata_collector for explicit metadata save operations
