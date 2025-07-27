@@ -202,4 +202,4 @@ def route_from_report_generator(state: GraphState) -> str:
     else:
         # If there's an error, go back to intent_parser
         logger.debug(f"Routing from report_generator -> intent_parser (error)")
-        return "intent_parser"
+        return "complete"
