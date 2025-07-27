@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🤖 Risk Assessment AI - ISO 27001 Chatbot</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+        <div class="shape shape-5"></div>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-content">
+          <div class="logo-section">
+            <div class="logo-icon">
+              <i class="fas fa-shield-halved"></i>
+              <div class="logo-glow"></div>
+            </div>
+            <div class="logo-text">
+              <h1>Risk Assessment AI</h1>
+              <span class="logo-subtitle">ISO 27001 Compliance Chatbot</span>
+            </div>
+          </div>
+
+          <div class="header-controls">
+            <div class="connection-status" id="connectionStatus">
+              <div class="status-dot"></div>
+              <span class="status-text">Disconnected</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+              <i class="fas fa-moon"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Sidebar Panel -->
+        <aside class="control-panel">
+          <!-- User Connection -->
+          <div class="panel-section user-section">
+            <div class="section-header">
+              <i class="fas fa-user-astronaut"></i>
+              <h3>Connect to AI</h3>
+            </div>
+            <div class="user-controls">
+              <div class="input-group">
+                <input type="text" id="usernameInput" placeholder="Enter your username..." class="futuristic-input" maxlength="50" />
+                <div class="input-effects"></div>
+              </div>
+              <button id="connectBtn" class="connect-button">
+                <span class="btn-content">
+                  <i class="fas fa-rocket"></i>
+                  <span class="btn-text">Launch Connection</span>
+                </span>
+                <div class="btn-glow"></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Assessment Progress -->
+          <div class="panel-section progress-section">
+            <div class="section-header">
+              <i class="fas fa-chart-line"></i>
+              <h3>Assessment Flow</h3>
+            </div>
+            <div class="progress-timeline">
+              <div class="progress-item" data-step="user">
+                <div class="progress-icon">
+                  <i class="fas fa-user-check"></i>
+                </div>
+                <div class="progress-content">
+                  <span class="progress-title">User Setup</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="progress-item" data-step="org">
+                <div class="progress-icon">
+                  <i class="fas fa-building"></i>
+                </div>
+                <div class="progress-content">
+                  <span class="progress-title">Organization Data</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="progress-item" data-step="risks">
+                <div class="progress-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="progress-content">
+                  <span class="progress-title">Risk Generation</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="progress-item" data-step="review">
+                <div class="progress-icon">
+                  <i class="fas fa-clipboard-check"></i>
+                </div>
+                <div class="progress-content">
+                  <span class="progress-title">Risk Review</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="progress-item" data-step="report">
+                <div class="progress-icon">
+                  <i class="fas fa-file-shield"></i>
+                </div>
+                <div class="progress-content">
+                  <span class="progress-title">Report Generation</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Stats -->
+          <div class="panel-section stats-section">
+            <div class="section-header">
+              <i class="fas fa-analytics"></i>
+              <h3>Live Analytics</h3>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="totalRisks">0</div>
+                  <div class="stat-label">Total Risks</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="approvedRisks">0</div>
+                  <div class="stat-label">Approved</div>
+                </div>
+              </div>
+
+              <div class="stat-card">
+                <div class="stat-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="pendingRisks">0</div>
+                  <div class="stat-label">Pending</div>
+                </div>
+              </div>
+
+              <div class="stat-card stat-wide">
+                <div class="stat-icon">
+                  <i class="fas fa-route"></i>
+                </div>
+                <div class="stat-content">
+                  <div class="stat-value" id="currentStep">Not Started</div>
+                  <div class="stat-label">Current Phase</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="panel-section actions-section">
+            <div class="section-header">
+              <i class="fas fa-magic"></i>
+              <h3>AI Commands</h3>
+            </div>
+            <div class="quick-actions">
+              <button class="action-btn" onclick="sendQuickMessage('I want to start a new risk assessment')">
+                <i class="fas fa-play"></i>
+                <span>Start Assessment</span>
+              </button>
+
+              <button class="action-btn" onclick="sendQuickMessage('Generate risks for my company')">
+                <i class="fas fa-brain"></i>
+                <span>Generate Risks</span>
+              </button>
+
+              <button class="action-btn" onclick="sendQuickMessage('Show me the risks for review')">
+                <i class="fas fa-search"></i>
+                <span>Review Risks</span>
+              </button>
+
+              <button class="action-btn" onclick="sendQuickMessage('Generate final report')">
+                <i class="fas fa-download"></i>
+                <span>Create Report</span>
+              </button>
+
+              <button class="action-btn" onclick="sendQuickMessage('Help me understand the ISO 27001 process')">
+                <i class="fas fa-question-circle"></i>
+                <span>Get Help</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Chat Interface -->
+        <main class="chat-interface">
+          <!-- Chat Header -->
+          <div class="chat-header">
+            <div class="chat-title">
+              <i class="fas fa-comments"></i>
+              <span>AI Risk Assessment Chat</span>
+            </div>
+            <div class="chat-controls">
+              <button class="control-btn" onclick="clearChat()">
+                <i class="fas fa-broom"></i>
+              </button>
+              <button class="control-btn" onclick="exportChat()">
+                <i class="fas fa-download"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Container -->
+          <div class="messages-container" id="messagesContainer">
+            <div class="welcome-screen">
+              <div class="welcome-content">
+                <div class="ai-avatar">
+                  <i class="fas fa-robot"></i>
+                  <div class="avatar-pulse"></div>
+                </div>
+                <h2>Welcome to Risk Assessment AI</h2>
+                <p>I'm your intelligent assistant for ISO 27001 risk assessments. Let's secure your organization together!</p>
+
+                <div class="welcome-features">
+                  <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Comprehensive Risk Analysis</span>
+                  </div>
+                  <div class="feature-card">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Interactive Progress Tracking</span>
+                  </div>
+                  <div class="feature-card">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Detailed Compliance Reports</span>
+                  </div>
+                </div>
+
+                <div class="connection-prompt">
+                  <i class="fas fa-arrow-left"></i>
+                  <span>Enter your username and connect to get started</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Typing Indicator -->
+          <div class="typing-indicator" id="typingIndicator">
+            <div class="typing-content">
+              <div class="typing-avatar">
+                <i class="fas fa-robot"></i>
+              </div>
+              <div class="typing-animation">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              <span class="typing-text">AI is analyzing...</span>
+            </div>
+          </div>
+
+          <!-- Message Input -->
+          <div class="message-input-container">
+            <div class="input-wrapper">
+              <div class="message-input-group">
+                <textarea id="messageInput" placeholder="Ask me about risk assessment, ISO 27001 compliance, or anything security-related..." disabled rows="1" maxlength="1000"></textarea>
+                <button id="sendBtn" disabled>
+                  <i class="fas fa-paper-plane"></i>
+                  <div class="send-effect"></div>
+                </button>
+              </div>
+              <div class="input-footer">
+                <div class="input-info">
+                  <i class="fas fa-lightbulb"></i>
+                  <span>Try: "Start assessment", "Generate risks", "Help with compliance"</span>
+                </div>
+                <div class="char-counter"><span id="charCount">0</span>/1000</div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Risk Details Modal -->
+    <div id="riskModal" class="modal">
+      <div class="modal-backdrop" onclick="closeRiskModal()"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Risk Assessment Details</h3>
+          <button class="modal-close" onclick="closeRiskModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="riskModalBody">
+          <!-- Risk details will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Metadata Collection Modal -->
+    <div id="metadataModal" class="metadata-modal">
+      <div class="metadata-backdrop" onclick="closeMetadataModal()"></div>
+      <div class="metadata-content">
+        <div class="metadata-header">
+          <h2><i class="fas fa-table"></i> Risk Metadata Collection</h2>
+          <p>Please provide additional details for each approved risk</p>
+          <button class="modal-close" onclick="closeMetadataModal()">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="metadata-body">
+          <form id="metadataForm">
+            <div class="metadata-table-container">
+              <table id="metadataTable" class="metadata-table">
+                <thead>
+                  <tr>
+                    <th class="risk-id-col">Risk ID</th>
+                    <th class="description-col">Description</th>
+                    <th class="asset-value-col">Asset Value ($)</th>
+                    <th class="department-col">Department</th>
+                    <th class="owner-col">Risk Owner</th>
+                    <th class="date-col">Target Date</th>
+                    <th class="progress-col">Progress</th>
+                    <th class="residual-col">Residual Risk</th>
+                  </tr>
+                </thead>
+                <tbody id="metadataTableBody">
+                  <!-- Table rows will be populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div class="metadata-actions">
+              <button type="button" class="btn btn-secondary" onclick="closeMetadataModal()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+              <button type="submit" class="btn btn-primary" id="saveMetadataBtn">
+                <i class="fas fa-save"></i> Save All Metadata
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

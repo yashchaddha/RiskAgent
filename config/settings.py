@@ -1,50 +1,25 @@
 from pydantic_settings import BaseSettings
-from pydantic import Field
 from typing import Optional
-import os
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
 
 class Settings(BaseSettings):
-    """Application settings loaded from environment variables"""
+    # MongoDB Configuration
+    mongodb_url: str = "mongodb://localhost:27017"
+    mongodb_database: str = "risk-db"
     
-    MONGODB_URL: str = Field(default="mongodb://localhost:27017", env="MONGODB_URL")
-    MONGODB_DATABASE: str = Field(default="risk-db", env="MONGODB_DATABASE")   
-    OPENAI_API_KEY: Optional[str] = Field(default=None, env="OPENAI_API_KEY")
-    LOG_LEVEL: str = Field(default="INFO", env="LOG_LEVEL")
-    DEBUG: bool = Field(default=False, env="DEBUG")
-    HOST: str = Field(default="localhost", env="HOST")
-    PORT: int = Field(default=8000, env="PORT")
+    # OpenAI Configuration
+    openai_api_key: str
+    openai_model: str = "gpt-4o"
+    
+    # Application Configuration
+    debug: bool = False
+    log_level: str = "INFO"
+    
+    # Session Configuration
+    session_timeout_minutes: int = 60
+    max_regeneration_count: int = 3
     
     class Config:
         env_file = ".env"
-        case_sensitive = True
+        case_sensitive = False
 
-# Global settings instance
 settings = Settings()
-
-def validate_settings():
-    """Validate required settings"""
-    errors = []
-
-    if not settings.OPENAI_API_KEY:
-        errors.append("OPENAI_API_KEY must be provided")
-
-    if not settings.MONGODB_URL:
-        errors.append("MONGODB_URL must be provided")
-
-    if not settings.LOG_LEVEL:
-        errors.append("LOG_LEVEL must be provided")
-
-    if not settings.HOST:
-        errors.append("HOST must be provided")
-
-    if not settings.PORT:
-        errors.append("PORT must be provided")
-
-    if errors:
-        raise ValueError(f"Configuration errors: {'; '.join(errors)}")
-
-    return True
