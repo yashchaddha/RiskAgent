@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risk Management Agent</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading Risk Management Agent...</p>
+      </div>
+    </div>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="auth-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1><i class="fas fa-shield-alt"></i> Risk Management Agent</h1>
+          <p>Intelligent risk assessment powered by AI</p>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="auth-form">
+          <h2>Welcome Back</h2>
+          <p class="form-description">Sign in to access your risk management dashboard</p>
+          <form id="login-form-element">
+            <div class="form-group">
+              <label for="login-username">Username</label>
+              <input type="text" id="login-username" required placeholder="Enter your username" />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" required placeholder="Enter your password" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+          </form>
+          <p class="auth-switch">
+            New to Risk Management Agent?
+            <a href="#" id="show-register">Create an account</a>
+          </p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="auth-form hidden">
+          <h2>Get Started</h2>
+          <p class="form-description">Create your account to begin comprehensive risk assessment</p>
+          <form id="register-form-element">
+            <div class="form-group">
+              <label for="register-username">Username</label>
+              <input type="text" id="register-username" required placeholder="Choose a username" />
+            </div>
+            <div class="form-group">
+              <label for="register-password">Password</label>
+              <input type="password" id="register-password" required placeholder="Create a secure password" />
+              <small class="form-hint">Minimum 8 characters recommended</small>
+            </div>
+            <div class="form-group">
+              <label for="register-organization">Organization Name</label>
+              <input type="text" id="register-organization" required placeholder="Your company or organization" />
+            </div>
+            <div class="form-group">
+              <label for="register-industry">Industry Sector</label>
+              <select id="register-industry" required>
+                <option value="">Select your industry</option>
+                <option value="Technology">Technology</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="Financial Services">Financial Services</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Retail">Retail</option>
+                <option value="Education">Education</option>
+                <option value="Government">Government</option>
+                <option value="Energy">Energy</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Other">Other</option>
+              </select>
+              <small class="form-hint">This helps us provide industry-specific risk assessments</small>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-user-plus"></i> Create Account</button>
+          </form>
+          <p class="auth-switch">
+            Already have an account?
+            <a href="#" id="show-login">Sign in instead</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app-container" class="app-container hidden">
+      <!-- Header -->
+      <header class="app-header">
+        <div class="header-left">
+          <h1><i class="fas fa-shield-alt"></i> Risk Management Agent</h1>
+          <div class="user-info"><span id="user-name"></span> | <span id="user-organization"></span></div>
+        </div>
+        <div class="header-right">
+          <div class="progress-indicator">
+            <span>Progress:</span>
+            <div class="progress-bar">
+              <div id="progress-fill" class="progress-fill"></div>
+            </div>
+            <span id="progress-text">0%</span>
+          </div>
+          <div class="header-actions">
+            <button id="settings-btn" class="btn btn-outline btn-sm" title="Settings">
+              <i class="fas fa-cog"></i>
+            </button>
+            <button id="logout-btn" class="btn btn-secondary btn-sm" title="Logout">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="sidebar-header">
+            <h3>Risk Assessment Workflow</h3>
+            <div class="workflow-progress-mini">
+              <div class="progress-steps">
+                <div class="progress-step active" data-step="1" title="Start Assessment">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <div class="progress-step" data-step="2" title="Review Risks">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="progress-step" data-step="3" title="Generate Report">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <nav class="nav-menu">
+            <div class="nav-section">
+              <div class="nav-section-title">Assessment</div>
+              <a href="#" class="nav-item active" data-section="chat" data-step="1">
+                <i class="fas fa-comments"></i>
+                <div class="nav-item-content">
+                  <span class="nav-item-title">AI Assistant</span>
+                  <span class="nav-item-desc">Start your risk assessment</span>
+                </div>
+                <div class="nav-item-badge">Start</div>
+              </a>
+            </div>
+
+            <div class="nav-section">
+              <div class="nav-section-title">Management</div>
+              <a href="#" class="nav-item" data-section="risks" data-step="2">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div class="nav-item-content">
+                  <span class="nav-item-title">Total Risks</span>
+                  <span class="nav-item-desc">View and manage risks</span>
+                </div>
+                <span class="nav-item-count" id="nav-risk-count">0</span>
+              </a>
+              <a href="#" class="nav-item" data-section="matrix">
+                <i class="fas fa-th"></i>
+                <div class="nav-item-content">
+                  <span class="nav-item-title">Risk Matrix</span>
+                  <span class="nav-item-desc">Configure assessment scales</span>
+                </div>
+              </a>
+            </div>
+
+            <div class="nav-section">
+              <div class="nav-section-title">Reporting</div>
+              <a href="#" class="nav-item" data-section="reports" data-step="3">
+                <i class="fas fa-file-alt"></i>
+                <div class="nav-item-content">
+                  <span class="nav-item-title">Reports</span>
+                  <span class="nav-item-desc">Export risk assessments</span>
+                </div>
+                <span class="nav-item-count" id="nav-report-count">0</span>
+              </a>
+              <!-- <a href="#" class="nav-item" data-section="dashboard"> -->
+              <!-- <i class="fas fa-chart-line"></i> -->
+              <!-- <div class="nav-item-content">
+                  <span class="nav-item-title">Dashboard</span>
+                  <span class="nav-item-desc">Overview and analytics</span>
+                </div> -->
+              <!-- </a> -->
+            </div>
+          </nav>
+
+          <!-- Quick Stats -->
+          <div class="quick-stats">
+            <div class="stats-header">
+              <i class="fas fa-chart-bar"></i>
+              <h3>Assessment Progress</h3>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-lightbulb"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="stat-generated">0</span>
+                <span class="stat-label">Generated Risks</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="stat-finalized">0</span>
+                <span class="stat-label">Finalized Risks</span>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon">
+                <i class="fas fa-file-export"></i>
+              </div>
+              <div class="stat-content">
+                <span class="stat-value" id="stat-reports">0</span>
+                <span class="stat-label">Generated Reports</span>
+              </div>
+            </div>
+            <div class="next-step-hint" id="next-step-hint">
+              <i class="fas fa-arrow-right"></i>
+              <span>Ready to start? Begin with the AI Assistant!</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content-area">
+          <!-- Chat Section -->
+          <section id="chat-section" class="content-section active">
+            <div class="chat-container">
+              <div class="chat-header">
+                <div class="chat-header-content">
+                  <h2>AI Risk Assessment</h2>
+                  <p class="chat-subtitle">Get personalized risk insights and recommendations</p>
+                </div>
+                <div class="chat-status">
+                  <span id="connection-status" class="status-indicator"> <i class="fas fa-circle"></i> Connected </span>
+                  <button id="clear-chat" class="btn btn-outline btn-sm"><i class="fas fa-trash"></i> Clear Chat</button>
+                </div>
+              </div>
+
+              <div id="chat-messages" class="chat-messages">
+                <div class="welcome-message">
+                  <div class="welcome-avatar">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                  <div class="welcome-content">
+                    <h3>Welcome to your AI Risk Assistant!</h3>
+                    <p>I'm here to help you identify, assess, and manage risks for your organization. Here's how we can get started:</p>
+                    <div class="welcome-steps">
+                      <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                          <strong>Generate Risks</strong>
+                          <p>I'll analyze your industry and create relevant risk scenarios</p>
+                        </div>
+                      </div>
+                      <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                          <strong>Review & Customize</strong>
+                          <p>Select and modify risks that apply to your organization</p>
+                        </div>
+                      </div>
+                      <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                          <strong>Get Your Report</strong>
+                          <p>Receive a comprehensive risk management report</p>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="welcome-cta">Try saying "Generate risks for my organization" to begin!</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                  <input type="text" id="chat-input" placeholder="Type your message here..." maxlength="2000" />
+                  <button id="send-message" class="btn btn-primary" title="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                  </button>
+                </div>
+                <div class="quick-actions">
+                  <div class="quick-actions-label">Quick Start:</div>
+                  <button class="quick-action-btn" data-message="Generate risks for my organization"><i class="fas fa-magic"></i> Generate Risks</button>
+                  <!-- <button class="quick-action-btn" data-message="What types of risks should I consider?"><i class="fas fa-question-circle"></i> Risk Types</button> -->
+                  <!-- <button class="quick-action-btn" data-message="Show me an example risk assessment"><i class="fas fa-eye"></i> Example Assessment</button> -->
+                  <!-- <button class="quick-action-btn" data-message="How does risk scoring work?"><i class="fas fa-calculator"></i> Risk Scoring</button> -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Risks Section -->
+          <section id="risks-section" class="content-section">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Risk Register</h2>
+                <p class="section-description">Manage and track your organization's risk assessments</p>
+              </div>
+              <div class="section-actions">
+                <div class="filter-group">
+                  <label for="risk-filter" class="filter-label">Filter by status:</label>
+                  <select id="risk-filter" class="form-select">
+                    <option value="all">All Risks</option>
+                    <option value="generated">Generated</option>
+                    <option value="finalized">Finalized</option>
+                  </select>
+                </div>
+                <button id="generate-risks-btn" class="btn btn-primary"><i class="fas fa-magic"></i> Generate New Risks</button>
+              </div>
+            </div>
+
+            <div id="risks-container" class="risks-container">
+              <!-- Risk cards will be dynamically added here -->
+            </div>
+          </section>
+
+          <!-- Reports Section -->
+          <section id="reports-section" class="content-section">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Risk Reports</h2>
+                <p class="section-description">Generate and export comprehensive risk assessment reports</p>
+              </div>
+              <div class="section-actions">
+                <button id="export-report-btn" class="btn btn-outline"><i class="fas fa-download"></i> Export Report</button>
+                <button id="download-pdf-btn" class="btn btn-outline" style="display: none"><i class="fas fa-file-pdf"></i> Download PDF</button>
+                <button id="generate-report-btn" class="btn btn-primary"><i class="fas fa-file-plus"></i> Generate New Report</button>
+              </div>
+            </div>
+
+            <div id="reports-container" class="reports-container">
+              <!-- Reports will be dynamically added here -->
+            </div>
+          </section>
+
+          <!-- Matrix Section -->
+          <section id="matrix-section" class="content-section">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Risk Assessment Matrix</h2>
+                <p class="section-description">Configure your risk scoring methodology and view risk distribution</p>
+              </div>
+            </div>
+
+            <div class="matrix-container">
+              <div class="matrix-config-card">
+                <div class="config-header">
+                  <div class="config-icon">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <div class="config-content">
+                    <h3>Matrix Configuration</h3>
+                    <p>Choose the complexity level for your risk assessments</p>
+                  </div>
+                </div>
+                <div class="matrix-selector">
+                  <label for="matrix-size" class="form-label">Assessment Complexity:</label>
+                  <select id="matrix-size" class="form-select">
+                    <option value="3x3">3×3 Matrix (Simple - Recommended for small teams)</option>
+                    <option value="4x4">4×4 Matrix (Moderate - Balanced detail)</option>
+                    <option value="5x5">5×5 Matrix (Detailed - Enterprise level)</option>
+                  </select>
+                  <button id="update-matrix-btn" class="btn btn-primary"><i class="fas fa-sync-alt"></i> Update Matrix</button>
+                </div>
+              </div>
+
+              <div class="matrix-visualization-card">
+                <h3>Risk Distribution</h3>
+                <div id="matrix-visualization" class="matrix-visualization">
+                  <!-- Matrix will be rendered here -->
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dashboard Section -->
+          <section id="dashboard-section" class="content-section">
+            <div class="section-header">
+              <div class="section-header-content">
+                <h2>Analytics Dashboard</h2>
+                <p class="section-description">Monitor your risk management progress and key insights</p>
+              </div>
+            </div>
+
+            <div class="dashboard-grid">
+              <div class="dashboard-card primary">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <i class="fas fa-tasks"></i>
+                  </div>
+                  <div class="card-title">
+                    <h3>Assessment Progress</h3>
+                    <p>Your workflow completion status</p>
+                  </div>
+                </div>
+                <div id="workflow-progress" class="progress-circle">
+                  <!-- Progress circle will be rendered here -->
+                </div>
+              </div>
+
+              <div class="dashboard-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <i class="fas fa-chart-pie"></i>
+                  </div>
+                  <div class="card-title">
+                    <h3>Risk Distribution</h3>
+                    <p>Breakdown by severity levels</p>
+                  </div>
+                </div>
+                <div id="risk-chart" class="chart-container">
+                  <!-- Risk distribution chart will be rendered here -->
+                </div>
+              </div>
+
+              <div class="dashboard-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <i class="fas fa-history"></i>
+                  </div>
+                  <div class="card-title">
+                    <h3>Recent Activity</h3>
+                    <p>Latest risk management actions</p>
+                  </div>
+                </div>
+                <div id="recent-activity" class="activity-list">
+                  <!-- Recent activity will be listed here -->
+                </div>
+              </div>
+
+              <div class="dashboard-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <i class="fas fa-heartbeat"></i>
+                  </div>
+                  <div class="card-title">
+                    <h3>System Health</h3>
+                    <p>Platform status and metrics</p>
+                  </div>
+                </div>
+                <div id="system-status" class="status-grid">
+                  <!-- System status indicators will be shown here -->
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <!-- Popup Modals -->
+    <!-- Risk Selection Popup -->
+    <div id="risk-selection-popup" class="popup-overlay hidden">
+      <div class="popup-container">
+        <div class="popup-header">
+          <h3><i class="fas fa-check-square"></i> Select and Edit Risks</h3>
+          <button class="popup-close" data-popup="risk-selection-popup">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="popup-content">
+          <div class="popup-info">
+            <p>Review the generated risks below. Select the ones relevant to your organization and edit them if needed.</p>
+          </div>
+          <div id="risk-selection-table" class="risk-table">
+            <!-- Risk selection table will be rendered here -->
+          </div>
+        </div>
+        <div class="popup-footer">
+          <button id="cancel-risk-selection" class="btn btn-secondary">Cancel</button>
+          <button id="finalize-risks" class="btn btn-primary"><i class="fas fa-clipboard-check"></i> Complete & Finalize Risks</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Collection Popup -->
+    <div id="data-collection-popup" class="popup-overlay hidden">
+      <div class="popup-container large">
+        <div class="popup-header">
+          <h3><i class="fas fa-edit"></i> Additional Risk Information</h3>
+          <button class="popup-close" data-popup="data-collection-popup">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="popup-content">
+          <div class="popup-info">
+            <p>Please provide additional details for your finalized risks to complete the assessment.</p>
+          </div>
+          <div id="data-collection-form" class="data-collection-form">
+            <!-- Data collection form will be rendered here -->
+          </div>
+        </div>
+        <div class="popup-footer">
+          <button id="cancel-data-collection" class="btn btn-secondary">Cancel</button>
+          <button id="submit-additional-data" class="btn btn-primary"><i class="fas fa-save"></i> Save Additional Data</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Popup -->
+    <div id="settings-popup" class="popup-overlay hidden">
+      <div class="popup-container">
+        <div class="popup-header">
+          <h3><i class="fas fa-cog"></i> Settings</h3>
+          <button class="popup-close" data-popup="settings-popup">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="popup-content">
+          <div class="settings-group">
+            <h4>Notifications</h4>
+            <label class="toggle-switch">
+              <input type="checkbox" id="enable-notifications" checked />
+              <span class="toggle-slider"></span>
+              Enable notifications
+            </label>
+          </div>
+          <div class="settings-group">
+            <h4>Theme</h4>
+            <select id="theme-select" class="form-select">
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="auto">Auto</option>
+            </select>
+          </div>
+          <div class="settings-group">
+            <h4>Language</h4>
+            <select id="language-select" class="form-select">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+            </select>
+          </div>
+        </div>
+        <div class="popup-footer">
+          <button id="save-settings" class="btn btn-primary">Save Settings</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification-toast" class="notification-toast hidden">
+      <div class="notification-content">
+        <i class="notification-icon"></i>
+        <span class="notification-message"></span>
+      </div>
+      <button class="notification-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app.js"></script>
+  </body>
+</html>
